@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    - cron: 30 11,19 * * *
+    - cron: 31 11,19 * * *
   release:
     types: [published]
   watch:
