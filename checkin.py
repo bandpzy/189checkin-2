@@ -31,14 +31,6 @@ if(username == "" or password == ""):
 
 # assert username and password, "在第23、24行填入有效账号和密码"
 
-# 钉钉机器人token 申请key 并设置密钥
-ddtoken = ""
-ddsecret = ""
-# xuthuskey = "27a...........................7b"
-
-if not ddtoken:
-    print("第36行的ddtoken 为空，签到结果将不会通过钉钉发送")
-
 
 def int2char(a):
     return BI_RM[a]
@@ -197,25 +189,6 @@ def main():
         description = response.json()['description']
         print(f"链接3抽奖获得{description}")
         res4 = f"链接3抽奖获得{description}"
-    if ddtoken.strip():
-        _ = ddtoken.strip()
-        timestamp = str(round(time.time() * 1000))
-        secret_enc = ddsecret.encode('utf-8')
-        string_to_sign = '{}\n{}'.format(timestamp, ddsecret)
-        string_to_sign_enc = string_to_sign.encode('utf-8')
-        hmac_code = hmac.new(secret_enc, string_to_sign_enc, digestmod=hashlib.sha256).digest()
-        sign = urllib.parse.quote_plus(base64.b64encode(hmac_code))
-        url = f'https://oapi.dingtalk.com/robot/send?access_token={ddtoken}&timestamp={timestamp}&sign={sign}'
-        headers = {"Content-Type": "application/json;charset=utf-8"}
-        data = {"msgtype": "markdown",
-                "markdown": {"title": f"sing189", "text": f"{username} \n> {res1} \n>{res2}{res3}{res4}"}}
-        response = requests.post(
-            url=url, data=json.dumps(data), headers=headers, timeout=15
-        ).json()
-        if not response["errcode"]:
-            print("钉钉机器人 推送成功！")
-        else:
-            print("钉钉机器人 推送失败！")
 
 
 def lambda_handler(event, context):  # aws default
@@ -234,12 +207,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='天翼云签到脚本')
     parser.add_argument('--username', type=str, help='账号')
     parser.add_argument('--password', type=str, help='密码')
-    parser.add_argument('--ddtoken', type=str, help='dd机器人推送')
-    parser.add_argument('--ddsecret', type=str, help='dd机器人推送')
     args = parser.parse_args()
     username = args.username
     password = args.password
-    ddtoken = args.ddtoken
-    ddsecret = args.ddsecret
     # time.sleep(random.randint(5, 30))
     main()
