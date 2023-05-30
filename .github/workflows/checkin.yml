@@ -8,7 +8,7 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    - cron: 48 3,10 * * *
+    - cron: 8 2,12 * * *
   release:
     types: [published]
   watch:
